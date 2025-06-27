@@ -148,6 +148,10 @@
     
 })();
 
+
+// ------------------------ function FLOW
+
+
 /*
 1. Why IIFE ?
 to avoid polluting the global scope,
@@ -162,6 +166,30 @@ undeclared variables, etc
     1. speedConroller => to store the UI panel so we dont duplicate it
     2. currentVideo => to store the current vdeo elemenr on youtube tab we are in
 
-4. 
+4. createSpeedController()
+    1. ccuilds a custom HTML panel using innerHTML (again dom)
+    2. buttons add for various speeds (already ther for users to choose from)
+    3. option to use custom speed between (0.1 abd 10.0)
+
+5. addEventListeners()\
+    1. press speed buttons => update playback speed
+    2. custom input => to apply custom speed
+
+6. setVideoSpeed(speed)
+    uses playbackRate property of 'video' element
+
+7. updateActiveButton(clickedBtn, customSpeed)
+    add and remove the active class on the button selected or when changed to shift speed control
+
+8. waitForVideo()
+    1. search for 'video' elemet (dom)
+    2. if navigate between videos, reinitialise the controller making it dynamic
+
+9. innit()
+    1. use setInterval to keep checking for new video (here qwith a internval of 1 sec)
+    2. MutationObserver to detect changes in url ot dom
+
+10. keydown handler (shortcut key)
+    1. aloowing user to press Alt + (1 - 9) to quixkly switch speeds 
 
 */
