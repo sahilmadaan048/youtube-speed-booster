@@ -2,30 +2,27 @@
   "manifest_version": 3,
   "name": "YouTube Speed Booster",
   "version": "1.0",
-  "description": "Watch YouTube videos at any speed (beyond 2x)",
+  "description": "Control YouTube video speed beyond default limits (0.1x - 10x)",
+
+  "permissions": ["activeTab", "scripting"],
+
+  "host_permissions": ["*://*.youtube.com/*"],
   "action": {
     "default_popup": "popup.html",
-    "default_icon": "icon.png"
+    "default_title": "YouTube Speed Booster"
   },
-  "host_permissions": ["https://www.youtube.com/*"],
-  "permissions": ["storage", "tabs"],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  
   "content_scripts": [
     {
-      "matches": ["https://www.youtube.com/*"],
-      "js": ["content.js"]
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"],
+      "css": ["style.css"],
+      "run_at": "document_end"
     }
-  ],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "commands": {
-    "increase-speed": {
-      "suggested_key": { "default": "Ctrl+Shift+Period" },
-      "description": "Increase playback speed"
-    },
-    "decrease-speed": {
-      "suggested_key": { "default": "Ctrl+Shift+Comma" },
-      "description": "Decrease playback speed"
-    }
-  }
+  ]
 }
