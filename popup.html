@@ -1,8 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        width: 250px;
+        padding: 15px;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        background: #1a1a1a;
+        color: white;
+        margin: 0;
+      }
+      .title {
+        text-align: center;
+        color: #ff0000;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+      .info {
+        background: #333;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+      .instructions {
+        font-size: 11px;
+        color: #ccc;
+        line-height: 1.4;
+      }
+      .shortcut {
+        background: #444;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-family: monospace;
+      }
+    </style>
+  </head>
   <body>
-    <input type="number" id="speedInput" min="0.1" step="0.1" value="1.0" />
-    <button id="setSpeed">Set Speed</button>
-    <script src="popup.js"></script>
+    <div class="title">YouTube Speed Booster</div>
+
+    <div class="info">
+      <div>Extension is active!</div>
+      <div style="font-size: 10px; color: #888; margin-top: 5px">
+        Look for the speed panel on YouTube videos
+      </div>
+    </div>
+
+    <div class="instructions">
+      <strong>How to use:</strong><br />
+      • Visit any YouTube video<br />
+      • Speed panel appears on the right<br />
+      • Click speed buttons or enter custom speed<br />
+      • Use keyboard shortcuts: <span class="shortcut">Alt + 1-9</span>
+      <br /><br />
+      <strong>Speed Range:</strong> 0.1x - 10x
+    </div>
   </body>
 </html>
