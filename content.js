@@ -1,23 +1,23 @@
-(function() {
+(function () {
     'use strict';
-    
+
     let speedController = null;
     let currentVideo = null;
-    
+
     function createSpeedController() {
         if (speedController) return;
-        
+
         speedController = document.createElement('div');
         speedController.id = 'youtube-speed-booster';
         speedController.innerHTML = `
-            <div class="speed-booster-panel">
+            <div class="speed-booster-panel draggable">
                 <div class="speed-booster-title">Speed Control</div>
                 <div class="speed-booster-controls">
                     <button class="speed-btn" data-speed="0.1">0.1x</button>
                     <button class="speed-btn" data-speed="0.25">0.25x</button>
                     <button class="speed-btn" data-speed="0.5">0.5x</button>
                     <button class="speed-btn" data-speed="0.75">0.75x</button>
-                    <button class="speed-btn" data-speed="1" class="active">1x</button>
+                    <button class="speed-btn active" data-speed="1">1x</button>
                     <button class="speed-btn" data-speed="1.25">1.25x</button>
                     <button class="speed-btn" data-speed="1.5">1.5x</button>
                     <button class="speed-btn" data-speed="1.75">1.75x</button>
@@ -34,12 +34,13 @@
                 <div class="speed-booster-current">Current: <span id="current-speed">1x</span></div>
             </div>
         `;
-        
+
         document.body.appendChild(speedController);
-        
+
         addEventListeners();
+        makeDraggable(speedController.querySelector('.speed-booster-panel'));
     }
-    
+
     function addEventListeners() {
         speedController.querySelectorAll('.speed-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -48,10 +49,10 @@
                 updateActiveButton(e.target);
             });
         });
-        
+
         const customInput = speedController.querySelector('#custom-speed');
         const applyBtn = speedController.querySelector('#apply-custom');
-        
+
         applyBtn.addEventListener('click', () => {
             const speed = parseFloat(customInput.value);
             if (speed >= 0.1 && speed <= 10) {
@@ -60,14 +61,14 @@
                 customInput.value = '';
             }
         });
-        
+
         customInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 applyBtn.click();
             }
         });
     }
-    
+
     function setVideoSpeed(speed) {
         const video = document.querySelector('video');
         if (video) {
@@ -78,12 +79,12 @@
             console.log('No video element found');
         }
     }
-    
+
     function updateActiveButton(clickedBtn, customSpeed = null) {
         speedController.querySelectorAll('.speed-btn').forEach(btn => {
             btn.classList.remove('active');
         });
-        
+
         if (clickedBtn) {
             clickedBtn.classList.add('active');
         } else if (customSpeed) {
@@ -93,14 +94,15 @@
             }
         }
     }
-    
+
     function waitForVideo() {
         const video = document.querySelector('video');
         if (video && video !== currentVideo) {
             currentVideo = video;
             createSpeedController();
+
             console.log('YouTube Speed Booster: Video detected');
-            
+
             video.addEventListener('loadstart', () => {
                 setTimeout(() => {
                     const currentSpeed = video.playbackRate;
@@ -110,12 +112,12 @@
             });
         }
     }
-    
+
     function init() {
         const checkForVideo = setInterval(() => {
             waitForVideo();
         }, 1000);
-        
+
         let lastUrl = location.href;
         new MutationObserver(() => {
             const url = location.href;
@@ -125,16 +127,66 @@
             }
         }).observe(document, { subtree: true, childList: true });
     }
-    
+
+    function makeDraggable(el) {
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        el.style.position = 'fixed';
+        el.style.zIndex = '9999';
+        el.style.top = '100px';
+        el.style.left = '100px';
+        el.style.cursor = 'move';
+
+        el.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            offsetX = e.clientX - el.offsetLeft;
+            offsetY = e.clientY - el.offsetTop;
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                el.style.left = `${e.clientX - offsetX}px`;
+                el.style.top = `${e.clientY - offsetY}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        el.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            const touch = e.touches[0];
+            offsetX = touch.clientX - el.offsetLeft;
+            offsetY = touch.clientY - el.offsetTop;
+            e.preventDefault();
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                const touch = e.touches[0];
+                el.style.left = `${touch.clientX - offsetX}px`;
+                el.style.top = `${touch.clientY - offsetY}px`;
+            }
+        });
+
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+    }
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
-    
+
     document.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        
+
         if (e.altKey && e.key >= '1' && e.key <= '9') {
             e.preventDefault();
             const speeds = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3];
@@ -145,7 +197,7 @@
             }
         }
     });
-    
+
 })();
 
 
